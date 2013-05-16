@@ -53,7 +53,6 @@ void CCMessageBox(const char * pszMsg, const char * pszTitle)
                                                          delegate: nil
                                                 cancelButtonTitle: @"OK"
                                                 otherButtonTitles: nil];
-    [messageBox autorelease];
     [messageBox show];
 }
 

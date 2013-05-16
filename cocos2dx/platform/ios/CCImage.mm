@@ -122,8 +122,6 @@ static bool _initWithFile(const char* path, tImageInfo *pImageinfo)
     
     ret = _initWithImage(CGImage, pImageinfo);
     
-    [png release];
-    [jpg release];
     
     return ret;
 }
@@ -542,8 +540,6 @@ bool CCImage::saveToFile(const char *pszFilePath, bool bIsToRGB)
     }
     
     [data writeToFile:[NSString stringWithUTF8String:pszFilePath] atomically:YES];
-        
-    [image release];
         
     if (needToCopyPixels)
     {

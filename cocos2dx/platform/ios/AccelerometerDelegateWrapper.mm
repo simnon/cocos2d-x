@@ -51,7 +51,6 @@ static AccelerometerDispatcher* s_pAccelerometerDispatcher;
     s_pAccelerometerDispatcher = 0;
     delegate_ = 0;
     delete acceleration_;
-    [super dealloc];
 }
 
 - (void) addDelegate: (cocos2d::CCAccelerometerDelegate *) delegate

@@ -28,12 +28,23 @@ NS_CC_BEGIN
 
 CCThread::~CCThread()
 {
-    [(id)m_pAutoreasePool release];
+//    [(id)m_pAutoreasePool release];
 }
 
 void CCThread::createAutoreleasePool()
 {
-    m_pAutoreasePool = [[NSAutoreleasePool alloc] init];
+    // TODO come back to this
+    // https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmAutoreleasePools.html
+    
+    /* 
+     Note: If you create secondary threads using the POSIX thread APIs instead of NSThread, 
+     you cannot use Cocoa unless Cocoa is in multithreading mode. Cocoa enters multithreading 
+     mode only after detaching its first NSThread object. To use Cocoa on secondary POSIX threads, 
+     your application must first detach at least one NSThread object, which can immediately exit. 
+     You can test whether Cocoa is in multithreading mode with the NSThread class method isMultiThreaded.
+     */
+    
+//    m_pAutoreasePool = [[NSAutoreleasePool alloc] init];
 }
 
 NS_CC_END

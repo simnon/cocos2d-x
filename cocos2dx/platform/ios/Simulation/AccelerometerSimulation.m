@@ -69,10 +69,8 @@ static AccelerometerSimulation *sharedAccelerometer = NULL;
 
 - (void) dealloc {
     if (sharedAccelerometer) {
-        [sharedAccelerometer release];
         sharedAccelerometer = NULL;
     }
-    [super dealloc];
 }
 
 // this is straight from developer guide example for multi-threaded notifications
@@ -81,7 +79,7 @@ static AccelerometerSimulation *sharedAccelerometer = NULL;
     
     notifications      = [[NSMutableArray alloc] init];
     notificationLock   = [[NSLock alloc] init];
-    notificationThread = [[NSThread currentThread] retain];
+    notificationThread = [NSThread currentThread];
     
     notificationPort = [[NSMachPort alloc] init];
     [notificationPort setDelegate:self];
@@ -102,7 +100,6 @@ static AccelerometerSimulation *sharedAccelerometer = NULL;
                               components:nil
                                     from:nil
                                 reserved:0];
-        [date release];
     }
     else {
         // now we are in the main thread
@@ -125,11 +122,10 @@ static AccelerometerSimulation *sharedAccelerometer = NULL;
 - (void) handleMachMessage:(void *) msg {
     [notificationLock lock];
     while ( [notifications count] ) {
-        NSNotification *notification = [[notifications objectAtIndex:0] retain];
+        NSNotification *notification = [notifications objectAtIndex:0];
         [notifications removeObjectAtIndex:0];
         [notificationLock unlock];
         [self processNotification:notification];
-        [notification release];
         [notificationLock lock];
     };
     [notificationLock unlock];
@@ -155,7 +151,6 @@ static AccelerometerSimulation *sharedAccelerometer = NULL;
             buffer[count] = 0;
             NSString *str = [[NSString alloc] initWithUTF8String:buffer];
             [[NSNotificationCenter defaultCenter]  postNotificationName:@"ThreadAccelNotification" object:str];
-            [str release];
         }
         
     }

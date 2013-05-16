@@ -97,22 +97,22 @@ static EAGLView *view = 0;
 
 + (id) viewWithFrame:(CGRect)frame
 {
-    return [[[self alloc] initWithFrame:frame] autorelease];
+    return [[self alloc] initWithFrame:frame];
 }
 
 + (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format
 {
-    return [[[self alloc]initWithFrame:frame pixelFormat:format] autorelease];
+    return [[self alloc]initWithFrame:frame pixelFormat:format];
 }
 
 + (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth
 {
-    return [[[self alloc] initWithFrame:frame pixelFormat:format depthFormat:depth preserveBackbuffer:NO sharegroup:nil multiSampling:NO numberOfSamples:0] autorelease];
+    return [[self alloc] initWithFrame:frame pixelFormat:format depthFormat:depth preserveBackbuffer:NO sharegroup:nil multiSampling:NO numberOfSamples:0];
 }
 
 + (id) viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth preserveBackbuffer:(BOOL)retained sharegroup:(EAGLSharegroup*)sharegroup multiSampling:(BOOL)multisampling numberOfSamples:(unsigned int)samples
 {
-    return [[[self alloc]initWithFrame:frame pixelFormat:format depthFormat:depth preserveBackbuffer:retained sharegroup:sharegroup multiSampling:multisampling numberOfSamples:samples] autorelease];
+    return [[self alloc]initWithFrame:frame pixelFormat:format depthFormat:depth preserveBackbuffer:retained sharegroup:sharegroup multiSampling:multisampling numberOfSamples:samples];
 }
 
 + (id) sharedEGLView
@@ -142,7 +142,6 @@ static EAGLView *view = 0;
         preserveBackbuffer_ = retained;
         markedText_ = nil;
         if( ! [self setupSurfaceWithSharegroup:sharegroup] ) {
-            [self release];
             return nil;
         }
 
@@ -175,7 +174,6 @@ static EAGLView *view = 0;
         markedText_ = nil;
         
         if( ! [self setupSurfaceWithSharegroup:nil] ) {
-            [self release];
             return nil;
         }
     }
@@ -247,9 +245,7 @@ static EAGLView *view = 0;
 
 - (void) dealloc
 {
-    [renderer_ release];
     self.keyboardShowNotification = NULL; // implicit release
-    [super dealloc];
 }
 
 - (void) layoutSubviews
@@ -480,9 +476,6 @@ static EAGLView *view = 0;
 
 - (BOOL)canBecomeFirstResponder
 {
-    if (nil != markedText_) {
-        [markedText_ release];
-    }
     markedText_ = nil;
     if (isUseUITextField)
     {
@@ -515,7 +508,6 @@ static EAGLView *view = 0;
 - (void)insertText:(NSString *)text
 {
     if (nil != markedText_) {
-        [markedText_ release];
         markedText_ = nil;
     }
     const char * pszText = [text cStringUsingEncoding:NSUTF8StringEncoding];
@@ -525,7 +517,6 @@ static EAGLView *view = 0;
 - (void)deleteBackward
 {
     if (nil != markedText_) {
-        [markedText_ release];
         markedText_ = nil;
     }
     cocos2d::CCIMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
@@ -560,7 +551,7 @@ static EAGLView *view = 0;
 }
 - (UITextRange *)selectedTextRange;
 {
-    return [[[UITextRange alloc] init] autorelease];
+    return [[UITextRange alloc] init];
 }
 
 #pragma mark UITextInput - Replacing and Returning Text
@@ -613,11 +604,7 @@ static EAGLView *view = 0;
     if (markedText == markedText_) {
         return;
     }
-    if (nil != markedText_) {
-        [markedText_ release];
-    }
     markedText_ = markedText;
-    [markedText_ retain];
 }
 - (void)unmarkText;
 {
@@ -628,7 +615,6 @@ static EAGLView *view = 0;
     }
     const char * pszText = [markedText_ cStringUsingEncoding:NSUTF8StringEncoding];
     cocos2d::CCIMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
-    [markedText_ release];
     markedText_ = nil;
 }
 
